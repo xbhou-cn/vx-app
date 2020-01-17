@@ -1,3 +1,6 @@
+jasypt:
+      encryptor:
+               password: vx-app-HLFZ
 spring:
   application:
     name: for-love
@@ -8,8 +11,8 @@ spring:
     active: dev
   datasource:
     url: jdbc:mysql://localhost/wx-app?userSSL=true&useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT
-    username: root
-    password: 123456
+    username: ENC(+U+4Dd/iASb0WuHNdP9KXQ==)
+    password: ENC(mzbkwYpebozdnua1hEOdWg==)
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   servlet:
@@ -54,8 +57,8 @@ logging:
         classpath:log4j2_dev.xml
 feign:
      user-client: https://api.weixin.qq.com
-     appid: wxb393e201cb801498
-     app-secret: 28d0a04566801eaf74a42a654f2cc40d
+     appid: ENC(sDkhl2TUp4be8cCyyKr7aZ85nCGBwGoX/KQaDoT8dyQ=)
+     app-secret: ENC(kpGXBeca+M49bhCXWF5miM7LyK6gJuKua6cw1zXS3kqwOngz8QgMrWUYvXNspV+P)
 ftp:
     enabled: true
     host: 192.168.1.70
@@ -63,7 +66,7 @@ ftp:
     port: 5211
 #    port: 5210
     username: Ftp-U
-    password: ai<819188546>
+    password: ENC(F+e36hrnT/iJa8gbQerevZhjNzlsdTkQ)
     encoding: UTF-8
 file:
     upload_path: /wx-app/HLFZ 
