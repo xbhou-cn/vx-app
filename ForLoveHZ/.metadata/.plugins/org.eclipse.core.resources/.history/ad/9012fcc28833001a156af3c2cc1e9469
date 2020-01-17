@@ -1,0 +1,28 @@
+package com.hz.love.common;
+
+import org.springframework.beans.factory.annotation.Value;
+
+/**
+ * <b>概述</b>：<br>
+ * --共通--
+ * <p>
+ * <b>功能</b>：<br>
+ * --共通--
+ *
+ * @author HZ
+ */
+public class Common {
+    @Value("${file.path}")
+    private static String FILE_PATH;
+
+    /**
+     * @uploadFile:文件上传到服务器
+     * @return
+     * @return boolean
+     * @date 2020年1月10日 下午5:08:09
+     * @author HZ
+     */
+    public static boolean uploadFile() {
+
+    }
+}

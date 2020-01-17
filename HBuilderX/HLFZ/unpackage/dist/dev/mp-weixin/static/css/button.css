@@ -1,0 +1,9 @@
+.btn-blue {
+	background-color: #007aff;
+	color: #fff;
+}
+
+.btn-blue-active {
+	color: hsla(0, 0%, 100%, .6);
+	background-color: #0062cc;
+}

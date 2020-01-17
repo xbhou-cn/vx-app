@@ -1,0 +1,17 @@
+package com.hz.love.common;
+
+import org.springframework.beans.factory.annotation.Value;
+
+/**
+ * <b>概述</b>：<br>
+ * --共通--
+ * <p>
+ * <b>功能</b>：<br>
+ * --共通--
+ *
+ * @author HZ
+ */
+public class Common {
+    @Value("${file.path}")
+    private static String FILE_PATH;
+}

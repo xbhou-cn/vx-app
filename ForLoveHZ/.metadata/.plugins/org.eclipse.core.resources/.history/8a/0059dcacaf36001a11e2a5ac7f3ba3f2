@@ -1,0 +1,14 @@
+package com.hz.love.model;
+
+/**
+ * <b>概述</b>：<br>
+ * --Ftp实体类--
+ * <p>
+ * <b>功能</b>：<br>
+ * --Ftp实体类--
+ *
+ * @author HZ
+ */
+public class FtpModel {
+
+}

@@ -1,0 +1,14 @@
+package com.hz.love.common;
+
+/**
+ * <b>概述</b>：<br>
+ * --常量--
+ * <p>
+ * <b>功能</b>：<br>
+ * --todo--
+ *
+ * @author HZ
+ */
+public class Constant {
+
+}

@@ -1,0 +1,25 @@
+package com.hz.love.configuration;
+
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * <b>概述</b>：<br>
+ * --todo--
+ * <p>
+ * <b>功能</b>：<br>
+ * --todo--
+ *
+ * @author HZ
+ */
+@Configuration
+@ConditionalOnClass({GenericObjectPool.class, FTPClient.class})
+@ConditionalOnProperty(value = "ftp.enabled", havingValue = "true")
+@EnableConfigurationProperties(FTPConfiguration.FtpConfigProperties.class)
+public class FTPConfiguration {
+
+}
