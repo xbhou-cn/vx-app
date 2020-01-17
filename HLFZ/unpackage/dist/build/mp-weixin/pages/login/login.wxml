@@ -1,1 +1,0 @@
-<view><image class="login-image" src="{{imgSrc}}" mode="widthFix"></image><button class="btn-blue login-button" open-type="getUserInfo" hover-class="btn-blue-active" loading="{{clickF}}" data-event-opts="{{[['tap',[['login',['$event']]]]]}}" bindtap="__e">点击微信登陆</button></view>
