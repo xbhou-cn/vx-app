@@ -58,10 +58,10 @@ feign:
      app-secret: 28d0a04566801eaf74a42a654f2cc40d
 ftp:
     enabled: true
-#    host: 192.168.1.70
-    host: 192.168.1.108
-#    port: 5211
-    port: 5210
+    host: 192.168.1.70
+#    host: 192.168.1.108
+    port: 5211
+#    port: 5210
     username: Ftp-U
     password: ai<819188546>
     encoding: UTF-8
