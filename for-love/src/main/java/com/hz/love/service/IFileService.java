@@ -1,5 +1,7 @@
 package com.hz.love.service;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hz.love.result.ResultEntity;
@@ -26,15 +28,21 @@ public interface IFileService {
     ResultEntity uploadFile(MultipartFile file, String modularPath);
 
     /**
-     * @getDownloadFile:获得下载文件
+     * @getFileBase64:获取文件base64
      * @param fileId 文件ID
      * @return ResultEntity
-     * @date 2020年1月15日 下午3:41:53
+     * @date 2020年1月17日 上午11:26:03
      * @author 侯效标
-     * @param response 响应
-     * @param request 请求
-     * @throws Exception
      */
-    ResultEntity getDownloadFile(String fileId);
+    ResultEntity getFileBase64(String fileId);
+
+    /**
+     * @downLoadFile:文件下载
+     * @param fileId 文件ID
+     * @param response 响应
+     * @date 2020年1月17日 上午11:36:43
+     * @author 侯效标
+     */
+    void downLoadFile(String fileId, HttpServletResponse response);
 
 }

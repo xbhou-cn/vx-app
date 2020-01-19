@@ -11,7 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -272,19 +274,19 @@ public class FtpUtil {
     }
 
     /**
-     * @downloadFile:下载文件
-     * @param cCmFile 文件路径
-     * @param out 响应
-     * @throws IOException
-     * @date 2020年1月15日 下午3:52:08
+     * @getFileBase64:获取文件base64编码
+     * @param cCmFile 文件信息
+     * @return ResultEntity
+     * @date 2020年1月17日 上午11:26:55
      * @author 侯效标
      */
-    public static ResultEntity downloadFile(CCmFile cCmFile) {
+    public static ResultEntity getFileBase64(CCmFile cCmFile) {
         FTPClient ftpClient = getFtpClient();
-        if (!makeAndChangeDir(ftpClient, cCmFile.getFilePath())) {
+        if (!changeDir(ftpClient, cCmFile.getFilePath())) {
             logger.error("切换目录失败");
             return new ResultEntity(false, MsgEnum.ERR_MSG_07.getCode());
         }
+        Map<String, Object> rs = new HashMap<>();
         String result = null;
         InputStream in = null;
         String fileName = cCmFile.getFileId() + cCmFile.getFileDes();
@@ -293,10 +295,10 @@ public class FtpUtil {
             if (in == null) {
                 return new ResultEntity(false, MsgEnum.ERR_MSG_07.getCode());
             }
-            // byte[] bt = new byte[in.available()];
-            // in.read(bt);
             byte[] bt = input2byte(in);
             result = Base64.encodeBase64String(bt);
+            rs.put("FILE_INFO", cCmFile);
+            rs.put("FILE", result);
         } catch (IOException e) {
             return new ResultEntity(false, MsgEnum.ERR_MSG_99.getCode());
         } finally {
@@ -304,13 +306,49 @@ public class FtpUtil {
                 if (in != null) {
                     in.close();
                 }
-                // ftpClient.completePendingCommand();
+                // 防止第二次访问in为null
+                ftpClient.completePendingCommand();
             } catch (IOException e) {
                 return new ResultEntity(false, MsgEnum.ERR_MSG_99.getCode());
             }
             releaseFtpClient(ftpClient);
         }
-        return new ResultEntity(result, true, MsgEnum.SUC_MSG_03.getCode());
+        return new ResultEntity(rs, true, MsgEnum.SUC_MSG_03.getCode());
+    }
+
+    /**
+     * @downLoadFile:下载文件
+     * @param cCmFile 要下载的文件信息
+     * @param response 响应
+     * @date 2020年1月17日 上午11:48:08
+     * @author 侯效标
+     */
+    public static void downLoadFile(CCmFile cCmFile, HttpServletResponse response) {
+        String fileName = cCmFile.getFileId() + cCmFile.getFileDes();
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        FTPClient ftpClient = getFtpClient();
+        if (!changeDir(ftpClient, cCmFile.getFilePath())) {
+            logger.error(MsgEnum.ERR_MSG_07.getMsg());
+            return;
+        }
+        OutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            ftpClient.retrieveFile(fileName, out);
+        } catch (IOException e) {
+            logger.error("输出流获取异常");
+            return;
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    logger.error("输出流关闭异常");
+                    return;
+                }
+            }
+            releaseFtpClient(ftpClient);
+        }
     }
 
     /**
@@ -354,7 +392,33 @@ public class FtpUtil {
                     ftpClient.makeDirectory(mkDir);
                     ftpClient.changeWorkingDirectory(mkDir);
                 }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
 
+    /**
+     * @changeDir:切换目录
+     * @param ftpClient ftp客户端
+     * @param path 目录 （格式：/xxxx/xxxx）
+     * @return boolean
+     * @date 2020年1月17日 上午11:28:53
+     * @author 侯效标
+     */
+    public static boolean changeDir(FTPClient ftpClient, String path) {
+        /* 该部分为逐级创建 */
+        String[] split = path.split("/");
+        try {
+            ftpClient.changeWorkingDirectory("/");
+            for (String mkDir : split) {
+                if (StringUtils.isEmpty(mkDir)) {
+                    continue;
+                }
+                if (!ftpClient.changeWorkingDirectory(mkDir)) {
+                    ftpClient.changeWorkingDirectory(mkDir);
+                }
             }
         } catch (IOException e) {
             return false;

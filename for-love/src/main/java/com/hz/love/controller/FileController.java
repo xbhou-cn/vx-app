@@ -58,21 +58,21 @@ public class FileController extends BaseController {
     }
 
     /**
-     * @getDownloadFile:获得下载文件
+     * @getFileBase64:获取文件的base64编码
      * @param fileId 文件ID
      * @return ResultEntity
-     * @date 2020年1月15日 下午3:41:22
+     * @date 2020年1月17日 上午11:32:52
      * @author 侯效标
      */
     @GetMapping("/{fileId}")
-    public ResultEntity getDownloadFile(@PathVariable String fileId) {
+    public ResultEntity getFileBase64(@PathVariable String fileId) {
         logger.info("文件下载开始");
         ResultEntity result = null;
         try {
             if (StringUtils.isEmpty(fileId)) {
                 return new ResultEntity(false, MsgEnum.INF_MSG_01.getCode());
             } else {
-                result = fileService.getDownloadFile(fileId);
+                result = fileService.getFileBase64(fileId);
             }
         } catch (Exception e) {
             logger.info("文件下载异常");
@@ -81,4 +81,29 @@ public class FileController extends BaseController {
         logger.info("文件下载结束");
         return result;
     }
+
+    /**
+     * @downLoadFile:下载文件
+     * @param fileId 文件ID
+     * @param response 响应
+     * @date 2020年1月17日 上午11:36:55
+     * @author 侯效标
+     */
+    @GetMapping("/download/{fileId}")
+    public void downLoadFile(@PathVariable String fileId, HttpServletResponse response) {
+        logger.info("文件下载开始");
+        try {
+            if (StringUtils.isEmpty(fileId)) {
+                logger.error(MsgEnum.INF_MSG_02.getMsg());
+                return;
+            } else {
+                fileService.downLoadFile(fileId, response);
+            }
+        } catch (Exception e) {
+            logger.error(MsgEnum.ERR_MSG_99.getMsg());
+            return;
+        }
+        logger.info(MsgEnum.SUC_MSG_03.getMsg());
+    }
+
 }

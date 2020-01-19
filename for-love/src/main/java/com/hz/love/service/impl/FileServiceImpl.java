@@ -1,5 +1,9 @@
 package com.hz.love.service.impl;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,7 +29,7 @@ import com.hz.love.service.IFileService;
 public class FileServiceImpl implements IFileService {
     @Autowired
     private CCmFileMapper fileMapper;
-//    private final static Logger logger = LoggerFactory.getLogger(BaseController.class);
+    private final static Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
     /**
      * @describe 文件保存根目录
      */
@@ -46,14 +50,23 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public ResultEntity getDownloadFile(String fileId) {
+    public ResultEntity getFileBase64(String fileId) {
         CCmFile cCmFile = fileMapper.selectByPrimaryKey(fileId);
         if (cCmFile == null) {
             return new ResultEntity(false, MsgEnum.ERR_MSG_07.getCode());
         }
         // 定义则下载文件
-        // response.setHeader("Content-disposition", "attachment; filename=" + resultFileName);// 设定输出文件头
-        ResultEntity downloadFile = FtpUtil.downloadFile(cCmFile);
+        ResultEntity downloadFile = FtpUtil.getFileBase64(cCmFile);
         return downloadFile;
+    }
+
+    @Override
+    public void downLoadFile(String fileId, HttpServletResponse response) {
+        CCmFile cCmFile = fileMapper.selectByPrimaryKey(fileId);
+        if (cCmFile == null) {
+            logger.error(MsgEnum.ERR_MSG_07.getMsg());
+            return;
+        }
+        FtpUtil.downLoadFile(cCmFile, response);
     }
 }
